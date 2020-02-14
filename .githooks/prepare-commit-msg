@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-commit_msg="$1"
+commit_msg_file="$1"
 commit_type="$2"
 commit_sha1="$3" # only present when amending a commit
 
@@ -9,6 +9,9 @@ if [[ "$commit_type" != "message" ]]; then
   exit 0
 fi
 
-echo testing >> "$commit_msg"
+branch=$(git rev-parse --symbolic --abbrev-ref HEAD)
 
-sed -i 's/apple/orange/g' "$commit_msg"
+echo "Committing into branch: $branch" > $commit_msg_file;
+echo "" >> $commit_msg_file;
+echo "Some initial commit message body." >> $commit_msg_file;
+
