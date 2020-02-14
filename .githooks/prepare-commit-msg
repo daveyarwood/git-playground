@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
-echo "[prepare-commit-msg] commit message file path: $1"
-echo "[prepare-commit-msg] commit type: $2"
-echo "[prepare-commit-msg] commit SHA-1 (if amending a commit): $3"
+commit_msg="$1"
+commit_type="$2"
+commit_sha1="$3" # only present when amending a commit
+
+# Leave merge commits (commit_type=merge), etc. through unchanged.
+if [[ "$commit_type" != "message" ]]; then
+  exit 0
+fi
+
+echo testing >> "$commit_msg"
+
+sed -i 's/apple/orange/g' "$commit_msg"
