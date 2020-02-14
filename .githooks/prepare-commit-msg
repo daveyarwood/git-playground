@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
 normal=$(tput sgr0)
+bold=$(tput bold)
+white=$(tput setaf 7)
 yellow=$(tput setaf 3)
+
+function log() {
+  echo "[prepare-commit-msg] $@"
+}
 
 commit_msg_file="$1"
 commit_type="$2"
@@ -21,6 +27,8 @@ if head -n1 "$commit_msg_file" | grep -Eq '^\[ch[0-9]+\]'; then
   exit 0
 fi
 
+log "Prepending Clubhouse story ID to commit message..."
+
 branch="$(git rev-parse --abbrev-ref HEAD)"
 
 if echo "$branch" | grep -Eo '^release-[0-9]+$'; then
@@ -30,11 +38,8 @@ else
 fi
 
 if [[ -z "$story_id" ]]; then
-  echo "${yellow}WARN${normal}" \
-    "Unable to determine Clubhouse story ID from branch name."
-  echo "${yellow}WARN${normal}" \
-      "Run \`git commit --amend\" and prepend [chXXXX] to the commit message," \
-      "where XXXX is a Clubhouse story ID."
+  log "${yellow}Unable to determine Clubhouse story ID from branch"\
+      "name.${normal}"
   exit 0
 fi
 
