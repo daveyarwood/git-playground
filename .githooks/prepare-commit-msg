@@ -1,46 +1,10 @@
-##!/usr/bin/env bash
+#!/usr/bin/env bash
 
-#normal=$(tput sgr0)
-#bold=$(tput bold)
-#white=$(tput setaf 7)
-#yellow=$(tput setaf 3)
+function log() {
+  echo "[prepare-commit-msg] $@"
+}
 
-#function log() {
-#  echo "[prepare-commit-msg] $@"
-#}
+log "commit message filename: $1"
+log "commit type: $2"
+log "commit sha1 (only present when amending a commit): $3"
 
-#commit_msg_file="$1"
-#commit_type="$2"
-#commit_sha1="$3" # only present when amending a commit
-
-## commit_type=message indicates a new commit.
-## commit_type=commit indicates amending a previous commit.
-##
-## Let merge commits (commit_type=merge), etc. through unchanged.
-#if [[ "$commit_type" != "message" ]] && [[ "$commit_type" != "commit" ]]; then
-#  exit 0
-#fi
-
-## If the commit message already starts with a Clubhouse story ID like we expect,
-## then we're good to go.
-#if head -n1 "$commit_msg_file" | grep -Eq '^\[ch[0-9]+\]'; then
-#  exit 0
-#fi
-
-#log "Prepending Clubhouse story ID to commit message..."
-
-#branch="$(git rev-parse --abbrev-ref HEAD)"
-
-#if echo "$branch" | grep -Eo '^release-[0-9]+$'; then
-#  story_id="$(echo "$branch" | sed 's/release-//')"
-#else
-#  story_id="$(echo "$branch" | grep -Eo 'ch[0-9]+' | sed 's/ch//')"
-#fi
-
-#if [[ -z "$story_id" ]]; then
-#  log "${yellow}Unable to determine Clubhouse story ID from branch"\
-#      "name.${normal}"
-#  exit 0
-#fi
-
-#sed -i "1s/^/[ch$story_id] /" "$commit_msg_file"
