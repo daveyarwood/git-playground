@@ -15,6 +15,10 @@ function log() {
   echo "[pre-push] $@"
 }
 
+function log_error() {
+  log "${red}ERROR${normal} $@"
+}
+
 remote_name="$1"
 remote_location="$2"
 
@@ -34,12 +38,14 @@ done < <(git log --oneline "$remote_name/$branch..$branch")
 
 
 if [[ $(cat "$bad_commits" | wc -l) -gt 0 ]]; then
-  log "${red}ERROR${normal}" \
-      "The following commits are missing chXXXX, where XXXX is a Clubhouse" \
-      "story ID:"
+  log_error \
+    "The following commits are missing chXXXX, where XXXX is a Clubhouse" \
+    "story ID:"
+
+  log_error
 
   cat "$bad_commits" | while read commit; do
-    log "${red}ERROR${normal} $commit"
+    log_error "$commit"
   done
 
   exit 1
