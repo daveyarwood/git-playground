@@ -4,6 +4,9 @@ set -e
 
 echo "Installing hooks..."
 
-git config core.hooksPath .githooks
+# Reference:
+# https://www.viget.com/articles/two-ways-to-share-git-hooks-with-your-team/
+find .git/hooks -type l -exec rm {} \; \
+  && find .githooks -type f -exec ln -sf ../../{} .git/hooks/ \;
 
 echo "Done."
