@@ -36,9 +36,3 @@ if [[ -z "$story_id" ]]; then
 fi
 
 sed -i "1s/^/[ch$story_id]/" "$commit_msg_file"
-
-
-
-
-
-
