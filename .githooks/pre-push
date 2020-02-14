@@ -35,7 +35,7 @@ done < <(git log --oneline "$remote_name/$branch..$branch")
 
 if [[ $(cat "$bad_commits" | wc -l) -gt 0 ]]; then
   log "${red}ERROR${normal}" \
-      "The following commits are missing chXXXX, where XXXX is a Clubhouse " \
+      "The following commits are missing chXXXX, where XXXX is a Clubhouse" \
       "story ID:"
   cat "$bad_commits"
   exit 1
