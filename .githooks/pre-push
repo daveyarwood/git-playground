@@ -47,10 +47,5 @@ if [[ $(cat "$bad_commits" | wc -l) -gt 0 ]]; then
     log_error "$commit"
   done
 
-  log_error
-  log_error \
-    "(If fixing this is too much trouble, you can run \`git push" \
-    "--no-verify\` to bypass the pre-push hook.)"
-
   exit 1
 fi
