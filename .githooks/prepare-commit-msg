@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+normal=$(tput sgr0)
+yellow=$(tput setaf 3)
+
 commit_msg_file="$1"
 commit_type="$2"
 commit_sha1="$3" # only present when amending a commit
@@ -9,9 +12,28 @@ if [[ "$commit_type" != "message" ]]; then
   exit 0
 fi
 
-branch=$(git rev-parse --symbolic --abbrev-ref HEAD)
+# If the commit message already starts with a Clubhouse story ID like we expect,
+# then we're good to go.
+if head -n1 "$commit_msg_file" | grep -Eq '^\[ch[0-9]+\]'; then
+  exit 0
+fi
 
-echo "Committing into branch: $branch" > $commit_msg_file;
-echo "" >> $commit_msg_file;
-echo "Some initial commit message body." >> $commit_msg_file;
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if echo "$branch" | grep -Eo '^release-[0-9]+$'; then
+  story_id="ch$(echo "$branch" | sed 's/release-//')"
+else
+  story_id="$(echo "$branch" | grep -Eo 'ch[0-9]+' | sed 's/ch//')"
+fi
+
+if [[ -z "$story_id" ]]; then
+  echo "${yellow}WARN${normal}" \
+    "Unable to determine Clubhouse story ID from branch name."
+  echo "${yellow}WARN${normal}" \
+      "Run \`git commit --amend\" and prepend [chXXXX] to the commit message," \
+      "where XXXX is a Clubhouse story ID."
+  exit 0
+fi
+
+sed -i "1s/^/[ch$story_id]/" "$commit_msg_file"
 
