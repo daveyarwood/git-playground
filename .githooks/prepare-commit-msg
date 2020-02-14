@@ -21,7 +21,7 @@ fi
 branch="$(git rev-parse --abbrev-ref HEAD)"
 
 if echo "$branch" | grep -Eo '^release-[0-9]+$'; then
-  story_id="ch$(echo "$branch" | sed 's/release-//')"
+  story_id="$(echo "$branch" | sed 's/release-//')"
 else
   story_id="$(echo "$branch" | grep -Eo 'ch[0-9]+' | sed 's/ch//')"
 fi
@@ -35,4 +35,4 @@ if [[ -z "$story_id" ]]; then
   exit 0
 fi
 
-sed -i "1s/^/[ch$story_id]/" "$commit_msg_file"
+sed -i "1s/^/[ch$story_id] /" "$commit_msg_file"
