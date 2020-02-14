@@ -2,11 +2,14 @@
 
 set -e
 
-echo "Installing hooks..."
+normal=$(tput sgr0)
+bold=$(tput bold)
+yellow=$(tput setaf 3)
+
+echo "$bold$yellowSymlinking git hooks in .githooks => .git/hooks$normal"
 
 # Reference:
 # https://www.viget.com/articles/two-ways-to-share-git-hooks-with-your-team/
 find .git/hooks -type l -exec rm {} \; \
   && find .githooks -type f -exec ln -sf ../../{} .git/hooks/ \;
 
-echo "Done."
