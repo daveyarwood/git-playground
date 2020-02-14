@@ -1,8 +1,44 @@
 #!/usr/bin/env bash
 
-echo "[pre-push] remote name: $1, remote location: $2"
+normal=$(tput sgr0)
+bold=$(tput bold)
+black=$(tput setaf 0)
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)
+cyan=$(tput setaf 6)
+white=$(tput setaf 7)
 
-while read ref; do
-  echo "[pre-push] ref: $ref"
-done
+function log() {
+  echo "[pre-push] $@"
+}
 
+remote_name="$1"
+remote_location="$2"
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+bad_commits="$(mktemp)"
+
+while read commit; do
+  log "$commit"
+
+  if echo "$commit" | grep -q "Merge branch .* into"; then
+    continue
+  fi
+
+  if ! echo "$commit" | grep -Eq 'ch[0-9]+'; then
+    echo "$commit" >> "$bad_commits"
+  fi
+done < <(git log --oneline "$remote_name/$branch..$branch")
+
+
+if [[ $(cat "$bad_commits" | wc -l) -gt 0 ]]; then
+  log "${red}ERROR${normal}" \
+      "The following commits are missing chXXXX, where XXXX is a Clubhouse " \
+      "story ID:"
+  cat "$bad_commits"
+  exit 1
+fi
