@@ -34,10 +34,11 @@ else
 fi
 
 if [[ -z "$story_id" ]]; then
-  log "${red}Unable to determine Clubhouse story ID from branch name.${normal}"
-  log "${red}" \
-    "Run \`git commit --amend\" and prepend [chXXXX] to the commit message," \
-    "where XXXX is a Clubhouse story ID.${normal}"
+  log "${red}ERROR${normal}" \
+      "Unable to determine Clubhouse story ID from branch name."
+  log "${red}ERROR${normal}" \
+      "Commit messages must start with [chXXXX], where XXXX is a Clubhouse" \
+      "story ID."
   exit 1
 fi
 
