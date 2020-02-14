@@ -1,3 +1,44 @@
 #!/usr/bin/env bash
 
-echo "[commit-msg] commit message file path: $1"
+normal=$(tput sgr0)
+bold=$(tput bold)
+black=$(tput setaf 0)
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)
+cyan=$(tput setaf 6)
+white=$(tput setaf 7)
+
+function log() {
+  echo "[commit-msg] $@"
+}
+
+commit_msg_file="$1"
+
+# If the commit message already starts with a Clubhouse story ID like we expect,
+# then we're good to go.
+if head -n1 "$commit_msg_file" | grep -Eq '^\[ch[0-9]+\]'; then
+  exit 0
+fi
+
+log "Prepending Clubhouse story ID to commit message..."
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if echo "$branch" | grep -Eo '^release-[0-9]+$'; then
+  story_id="$(echo "$branch" | sed 's/release-//')"
+else
+  story_id="$(echo "$branch" | grep -Eo 'ch[0-9]+' | sed 's/ch//')"
+fi
+
+if [[ -z "$story_id" ]]; then
+  log "${red}Unable to determine Clubhouse story ID from branch name.${normal}"
+  log "${red}" \
+    "Run \`git commit --amend\" and prepend [chXXXX] to the commit message," \
+    "where XXXX is a Clubhouse story ID.${normal}"
+  exit 1
+fi
+
+sed -i "1s/^/[ch$story_id] /" "$commit_msg_file"
