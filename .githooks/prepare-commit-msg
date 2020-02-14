@@ -7,8 +7,11 @@ commit_msg_file="$1"
 commit_type="$2"
 commit_sha1="$3" # only present when amending a commit
 
-# Leave merge commits (commit_type=merge), etc. through unchanged.
-if [[ "$commit_type" != "message" ]]; then
+# commit_type=message indicates a new commit.
+# commit_type=commit indicates amending a previous commit.
+#
+# Let merge commits (commit_type=merge), etc. through unchanged.
+if [[ "$commit_type" != "message" ]] && [[ "$commit_type" != "commit" ]]; then
   exit 0
 fi
 
