@@ -41,12 +41,16 @@ if [[ $(cat "$bad_commits" | wc -l) -gt 0 ]]; then
   log_error \
     "The following commits are missing chXXXX, where XXXX is a Clubhouse" \
     "story ID:"
-
   log_error
 
   cat "$bad_commits" | while read commit; do
     log_error "$commit"
   done
+
+  log_error
+  log_error \
+    "(If fixing this is too much trouble, you can always run \`git push " \
+    "--no-verify\` to disable the pre-push hook.) "
 
   exit 1
 fi
