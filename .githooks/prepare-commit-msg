@@ -12,6 +12,3 @@ fi
 echo testing >> "$commit_msg"
 
 sed -i 's/apple/orange/g' "$commit_msg"
-
-
-
