@@ -15,6 +15,3 @@ echo "Committing into branch: $branch" > $commit_msg_file;
 echo "" >> $commit_msg_file;
 echo "Some initial commit message body." >> $commit_msg_file;
 
-
-
-
