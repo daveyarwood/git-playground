@@ -37,6 +37,10 @@ if [[ $(cat "$bad_commits" | wc -l) -gt 0 ]]; then
   log "${red}ERROR${normal}" \
       "The following commits are missing chXXXX, where XXXX is a Clubhouse" \
       "story ID:"
-  cat "$bad_commits"
+
+  cat "$bad_commits" | while read commit; do
+    log "${red}ERROR${normal} $commit"
+  done
+
   exit 1
 fi
