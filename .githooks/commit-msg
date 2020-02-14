@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+echo "[commit-msg] commit message file path: $1"

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+echo "[post-commit] last commit: $(git log -1 HEAD)"

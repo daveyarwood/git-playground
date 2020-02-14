@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo "[prepare-commit-msg] commit message file path: $1"
+echo "[prepare-commit-msg] commit type: $2"
+echo "[prepare-commit-msg] commit SHA-1 (if amending a commit): $3"

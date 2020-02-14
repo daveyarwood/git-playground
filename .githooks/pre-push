@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+echo "[pre-push] remote name: $1, remote location: $2"
+
+while read ref; do
+  echo "[pre-push] ref: $ref"
+done
+
