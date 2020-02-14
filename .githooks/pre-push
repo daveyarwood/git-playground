@@ -41,7 +41,6 @@ if [[ $(cat "$bad_commits" | wc -l) -gt 0 ]]; then
   log_error \
     "The following commits are missing chXXXX, where XXXX is a Clubhouse" \
     "story ID:"
-  log_error
 
   cat "$bad_commits" | while read commit; do
     log_error "$commit"
