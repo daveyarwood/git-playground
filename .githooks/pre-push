@@ -23,8 +23,6 @@ branch="$(git rev-parse --abbrev-ref HEAD)"
 bad_commits="$(mktemp)"
 
 while read commit; do
-  log "$commit"
-
   if echo "$commit" | grep -q "Merge branch .* into"; then
     continue
   fi
